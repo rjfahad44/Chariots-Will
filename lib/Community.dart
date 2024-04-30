@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_project/CustomBottomSheetsDialog.dart';
 
@@ -14,7 +15,8 @@ class Community extends StatefulWidget {
 }
 
 class _CommunityState extends State<Community> {
-  var listId = 4;
+
+  bool dataLoaded = false;
 
   List<HorizontalListDataModel> horizontalListModel = [
     const HorizontalListDataModel(
@@ -92,12 +94,39 @@ class _CommunityState extends State<Community> {
     ),
   ];
 
-  late List<bool> _isExpandedList;
+  List<MediaDataModel> mediaDataModelList = [];
+  MediaDataModel? dataModel;
+
+  late List<bool> _isExpandedList = [];
 
   @override
   void initState() {
     super.initState();
-    _isExpandedList = List.generate(verticalListModel.length, (index) => false);
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    final publicDataCollection = FirebaseFirestore.instance.collection('publicData');
+    try {
+      List<MediaDataModel> mediaDataList = [];
+      final querySnapshot = await publicDataCollection.get();
+      for (var document in querySnapshot.docs) {
+        final data = document.data();
+        print(data);
+        final mediaData = MediaDataModel.fromJson(data);
+        dataModel = mediaData;
+        mediaDataList.add(mediaData);
+        print(mediaData.title);
+      }
+      setState(() {
+        dataLoaded = true;
+        mediaDataModelList = mediaDataList;
+        _isExpandedList = List.generate(mediaDataModelList.length, (index) => false);
+      });
+
+    } catch (error) {
+      print(error);
+    }
   }
 
   @override
@@ -169,7 +198,7 @@ class _CommunityState extends State<Community> {
 
           //horizontal ListView
           SizedBox(
-            height: 110.0,
+            height: 115.0,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: horizontalListModel.length,
@@ -184,6 +213,7 @@ class _CommunityState extends State<Community> {
             height: 10.0,
           ),
 
+          dataLoaded ?
           Expanded(
             child: Padding(
                 padding: const EdgeInsets.all(10.0),
@@ -226,9 +256,9 @@ class _CommunityState extends State<Community> {
                         child: ListView.builder(
                           shrinkWrap: false,
                           scrollDirection: Axis.vertical,
-                          itemCount: verticalListModel.length,
+                          itemCount: mediaDataModelList.length,
                           itemBuilder: (context, index) {
-                            final model = verticalListModel[index];
+                            final model = mediaDataModelList[index];
 
                             return buildVerticalListItem(model, index);
                           },
@@ -239,19 +269,7 @@ class _CommunityState extends State<Community> {
                         child: TextButton(
                           onPressed: () {
                             setState(() {
-                              listId++;
-                              _isExpandedList.add(false);
-                              verticalListModel.add(VerticalListDataModel(
-                                id: listId,
-                                name: "Jose Campbell",
-                                profileImage:
-                                    "lib/images/profile_image_demo.png",
-                                description:
-                                    "Add new id: ($listId). For I know the plans I have for you, declares the Lord, plans for welfare and not for evil, to give you a future and a hope.",
-                                audioUrl:
-                                    "media_files/rabba_main_toh_mar_gaya_oye.mp3",
-                                videoUrl: "assets/media_files/demo_video.mp4",
-                              ));
+                              //Add your load more logic
                             });
                           },
                           style: TextButton.styleFrom(
@@ -272,6 +290,8 @@ class _CommunityState extends State<Community> {
                     ],
                   ),
                 )),
+          ) : const Center(
+            child: CircularProgressIndicator(),
           ),
         ],
       ),
@@ -318,7 +338,7 @@ class _CommunityState extends State<Community> {
     );
   }
 
-  Widget buildVerticalListItem(VerticalListDataModel model, int index) {
+  Widget buildVerticalListItem(MediaDataModel model, int index) {
     return Column(
       children: [
         Row(
@@ -327,8 +347,8 @@ class _CommunityState extends State<Community> {
               padding: const EdgeInsets.only(
                   left: 10.0, top: 10, right: 10, bottom: 10),
               child: CircleAvatar(
-                backgroundImage: AssetImage(model.profileImage),
-                radius: 10,
+                backgroundImage: NetworkImage(model.profileImage),
+                radius: 14,
               ),
             ),
             Expanded(
@@ -481,3 +501,39 @@ class VerticalListDataModel {
     required this.videoUrl,
   });
 }
+
+class MediaDataModel {
+  //final int id;
+  final String title;
+  final String description;
+  final String thumb;
+  final String audioUrl;
+  final String videoUrl;
+  final String profileImage;
+  final String name;
+
+  MediaDataModel({
+    //required this.id,
+    required this.title,
+    required this.description,
+    required this.thumb,
+    required this.audioUrl,
+    required this.videoUrl,
+    required this.profileImage,
+    required this.name,
+  });
+
+  factory MediaDataModel.fromJson(Map<String, dynamic> json) {
+    return MediaDataModel(
+      //id: json['id'] as int,
+      title: json['title'] as String,
+      description: json['description'] as String,
+      thumb: json['thumb'] as String,
+      audioUrl: json['audioUrl'] as String,
+      videoUrl: json['videoUrl'] as String,
+      profileImage: json['profileImage'] as String,
+      name: json['name'] as String,
+    );
+  }
+}
+

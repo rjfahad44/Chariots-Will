@@ -25,6 +25,7 @@ class AudioPlayerDialog extends StatefulWidget {
 class _AudioPlayerDialogState extends State<AudioPlayerDialog> {
   late AudioPlayer audioPlayer;
   PlayerState audioPlayerState = PlayerState.stopped;
+  bool isPlayerReady = false;
 
   @override
   void initState() {
@@ -47,7 +48,8 @@ class _AudioPlayerDialogState extends State<AudioPlayerDialog> {
 
   Future<void> _play() async {
     try {
-      await audioPlayer.play(AssetSource(widget.audioUrl));
+      //await audioPlayer.play(AssetSource(widget.audioUrl));
+      await audioPlayer.play(UrlSource(widget.audioUrl));
     } on FormatException catch (e) {
       print("Error playing audio: $e");
     }

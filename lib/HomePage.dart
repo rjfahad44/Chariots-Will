@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_project/Community.dart';
+import 'package:flutter_demo_project/FirstFivePages.dart';
+import 'package:flutter_demo_project/OtherPages.dart';
 import 'package:provider/provider.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -17,26 +19,26 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Future<bool> getData() async {
-    final user = _auth.currentUser;
-    if (user == null) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   bool _isLoggedIn = false;
 
   @override
   void initState() {
     super.initState();
-    getData().then((isLoggedIn) {
-      setState(() {
-        _isLoggedIn = isLoggedIn;
-      });
-    });
+    // getData().then((isLoggedIn) {
+    //   setState(() {
+    //     _isLoggedIn = isLoggedIn;
+    //   });
+    // });
   }
+
+  // Future<bool> getData() async {
+  //   final user = _auth.currentUser;
+  //   if (user == null) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -201,6 +203,48 @@ class _HomePageState extends State<HomePage> {
 
   void goTo(String item) {
     switch (item) {
+      case "Promises":
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const FirstFivePages(title: "Promises"),
+            ));
+        break;
+      case "Dedication":
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const FirstFivePages(title: "Dedication"),
+            ));
+        break;
+      case "Testimonials":
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const FirstFivePages(title: "Testimonials"),
+            ));
+        break;
+      case "Evangelism":
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const FirstFivePages(title: "Evangelism"),
+            ));
+        break;
+      case "Baptism":
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const FirstFivePages(title: "Baptism"),
+            ));
+        break;
+      case "Volunteer":
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const OtherPages(title: "Volunteer"),
+            ));
+        break;
       case "Community":
         Navigator.push(
             context,
@@ -208,7 +252,47 @@ class _HomePageState extends State<HomePage> {
               builder: (context) => const Community(title: "Community"),
             ));
         break;
-      case "":
+      case "Prayer":
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const OtherPages(title: "Prayer"),
+            ));
+        break;
+      case "Territory":
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const OtherPages(title: "Territory"),
+            ));
+        break;
+      case "Souls spirit and body":
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const OtherPages(title: "Souls spirit and body"),
+            ));
+        break;
+      case "Discipleship":
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const OtherPages(title: "Discipleship"),
+            ));
+        break;
+      case "Encounter":
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const OtherPages(title: "Encounter"),
+            ));
+        break;
+      case "Home Fellowship":
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const OtherPages(title: "Home Fellowship"),
+            ));
         break;
       default:
         "Handle default item click here";

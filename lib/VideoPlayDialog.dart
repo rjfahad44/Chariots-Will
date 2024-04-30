@@ -1,4 +1,3 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
@@ -25,14 +24,18 @@ class VideoPlayerDialog extends StatefulWidget {
 }
 
 class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
+
   var isPlayState = false;
+  var videoPlayerControllerSet = false;
+
   late VideoPlayerController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller =
-        VideoPlayerController.asset('assets/media_files/demo_video.mp4');
+    // _controller = VideoPlayerController.asset('assets/media_files/demo_video.mp4');
+    print("Inside into initState methode => ${widget.videoUrl}");
+    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl));
     _controller.initialize().then((_) {
       if (mounted) {
         setState(() {
@@ -47,6 +50,8 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
           }
         });
       }
+    }).catchError((error){
+      print("Error initializing video player: $error");
     });
   }
 
@@ -60,6 +65,7 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
 
   @override
   Widget build(BuildContext context) {
+
     return AlertDialog(
         backgroundColor: const Color(0xFF383838),
         title: const Text(
@@ -79,9 +85,7 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
                       aspectRatio: _controller.value.aspectRatio,
                       child: VideoPlayer(_controller),
                     )
-                  : const SizedBox(
-                      height: 8.0,
-                      width: 8.0,
+                  : const Center(
                       child: CircularProgressIndicator(),
                     ),
             ),
@@ -102,9 +106,13 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
                   }
                 });
               },
-              child: Icon(
-                isPlayState ? Icons.pause : Icons.play_arrow,
-                size: 40.0,
+              child: Visibility(
+                visible:  _controller.value.isInitialized,
+                child: Icon(
+                  isPlayState ? Icons.pause : Icons.play_arrow,
+                  size: 40.0,
+                  color: Colors.white,
+                ),
               ),
             ),
           ],
