@@ -39,59 +39,6 @@ class _CommunityState extends State<Community> {
       title: "Devotion",
       imageUrl: "assets/images/h_list_item_image_demo.png",
     ),
-    const HorizontalListDataModel(
-      id: 4,
-      title: "Demo",
-      imageUrl: "assets/images/h_list_item_image_demo.png",
-    ),
-  ];
-
-  List<VerticalListDataModel> verticalListModel = [
-    const VerticalListDataModel(
-      id: 0,
-      name: "Jose Campbell",
-      profileImage: "assets/images/profile_image_demo.png",
-      description:
-          "For I know the plans I have for you, declares the Lord, plans for welfare and not for evil, to give you a future and a hope.",
-      audioUrl: "media_files/rabba_main_toh_mar_gaya_oye.mp3",
-      videoUrl: "assets/media_files/demo_video.mp4",
-    ),
-    const VerticalListDataModel(
-      id: 1,
-      name: "Jose Campbell",
-      profileImage: "assets/images/profile_image_demo.png",
-      description:
-          "For I know the plans I have for you, declares the Lord, plans for welfare and not for evil, to give you a future and a hope.",
-      audioUrl: "media_files/le_aaunga.mp3",
-      videoUrl: "assets/media_files/demo_video.mp4",
-    ),
-    const VerticalListDataModel(
-      id: 2,
-      name: "Jose Campbell",
-      profileImage: "assets/images/profile_image_demo.png",
-      description:
-          "For I know the plans I have for you, declares the Lord, plans for welfare and not for evil, to give you a future and a hope.",
-      audioUrl: "media_files/rabba_main_toh_mar_gaya_oye.mp3",
-      videoUrl: "assets/media_files/demo_video.mp4",
-    ),
-    const VerticalListDataModel(
-      id: 0,
-      name: "Jose Campbell",
-      profileImage: "assets/images/profile_image_demo.png",
-      description:
-          "For I know the plans I have for you, declares the Lord, plans for welfare and not for evil, to give you a future and a hope.",
-      audioUrl: "media_files/le_aaunga.mp3",
-      videoUrl: "assets/media_files/demo_video.mp4",
-    ),
-    const VerticalListDataModel(
-      id: 3,
-      name: "Jose Campbell",
-      profileImage: "assets/images/profile_image_demo.png",
-      description:
-          "For I know the plans I have for you, declares the Lord, plans for welfare and not for evil, to give you a future and a hope.",
-      audioUrl: "media_files/rabba_main_toh_mar_gaya_oye.mp3",
-      videoUrl: "assets/media_files/demo_video.mp4",
-    ),
   ];
 
   List<MediaDataModel> mediaDataModelList = [];
@@ -133,24 +80,24 @@ class _CommunityState extends State<Community> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF101010),
-      appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: Text(
-          widget.title,
-          style: const TextStyle(color: Colors.white),
-          textAlign: TextAlign.center,
-        ),
-        backgroundColor: const Color(0xFF101010),
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_new_sharp,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.pop(context, false);
-          },
-        ),
-      ),
+      // appBar: AppBar(
+      //   iconTheme: const IconThemeData(color: Colors.white),
+      //   title: Text(
+      //     widget.title,
+      //     style: const TextStyle(color: Colors.white),
+      //     textAlign: TextAlign.center,
+      //   ),
+      //   backgroundColor: const Color(0xFF101010),
+      //   leading: IconButton(
+      //     icon: const Icon(
+      //       Icons.arrow_back_ios_new_sharp,
+      //       color: Colors.white,
+      //     ),
+      //     onPressed: () {
+      //       Navigator.pop(context, false);
+      //     },
+      //   ),
+      // ),
       body: Column(
         children: [
           //Top ImageView
@@ -299,42 +246,47 @@ class _CommunityState extends State<Community> {
   }
 
   Widget buildHorizontalImageWithTitleListItem(HorizontalListDataModel model) {
-    return Row(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: Image.asset(
-                  model.imageUrl,
-                  width: 70,
-                  height: 70,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) =>
-                      const Icon(Icons.error),
-                ),
-              ),
-              const SizedBox(
-                height: 8.0,
-              ),
-              Expanded(
-                child: Text(
-                  model.title,
-                  style: const TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.white,
+    return GestureDetector(
+      child: Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Image.asset(
+                    model.imageUrl,
+                    width: 70,
+                    height: 70,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) =>
+                    const Icon(Icons.error),
                   ),
-                  textAlign: TextAlign.justify,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-            ],
+                const SizedBox(
+                  height: 8.0,
+                ),
+                Expanded(
+                  child: Text(
+                    model.title,
+                    style: const TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.justify,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
+      onTap: (){
+
+      },
     );
   }
 
