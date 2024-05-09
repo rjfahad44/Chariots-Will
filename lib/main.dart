@@ -1,8 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_demo_project/SplashScreen.dart';
 import 'package:provider/provider.dart';
-
-import 'HomePage.dart';
 
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -23,15 +23,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'SplashScreen',
       theme: ThemeData(
           //colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff1C1C1C)),
           useMaterial3: true,
-          primarySwatch: Colors.grey,
+          primarySwatch: Colors.lightBlue,
           primaryTextTheme:
               const TextTheme(headlineMedium: TextStyle(color: Colors.white))),
       debugShowCheckedModeBanner: false,
-      home: const HomePage(title: 'Home'),
+      home: const SplashScreen(),
     );
   }
 }

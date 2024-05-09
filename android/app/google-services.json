@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "666060655093",
-    "project_id": "flutter-demo-project-7f9a2",
-    "storage_bucket": "flutter-demo-project-7f9a2.appspot.com"
+    "project_number": "425556212545",
+    "project_id": "charriotswill",
+    "storage_bucket": "charriotswill.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:666060655093:android:d43c73c5bb23be0a8438bc",
+        "mobilesdk_app_id": "1:425556212545:android:79d8d1fa33f6f4ced3bfc0",
         "android_client_info": {
-          "package_name": "com.example.flutter_demo_project"
+          "package_name": "com.charriotswill.dev.com"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCdXMQBCnJKOfGb6NJzOQdrPKDT8yrttm8"
+          "current_key": "AIzaSyCWKioGG8JrzewFcppiqp4hN4orXYvNH1k"
         }
       ],
       "services": {
