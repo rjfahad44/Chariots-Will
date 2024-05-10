@@ -79,7 +79,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             alignment: Alignment.topCenter,
                             child: Column(
                               children: [
-                                Image.asset("assets/images/ic_app_logo.jpg"),
+                                Image.asset(
+                                    "assets/images/ic_app_logo.jpg",
+                                  height: 100.0,
+                                  width: 100.0,
+                                ),
                                 const SizedBox(
                                   height: 30.0,
                                 ),

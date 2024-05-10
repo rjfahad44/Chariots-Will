@@ -1,19 +1,15 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_demo_project/PrefsDb.dart';
 import 'package:flutter_demo_project/SignInScreen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'AudioPlayDialog.dart';
 import 'FirstFivePages.dart';
 import 'OtherPages.dart';
 import 'VideoPlayDialog.dart';
-import 'package:http/http.dart' as http;
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -29,28 +25,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool _isDataLoaded = false;
-  List<HorizontalListDataModel> horizontalListModel = [
-    const HorizontalListDataModel(
-      id: 0,
-      title: "Prayer",
-      imageUrl: "assets/images/h_list_item_image_demo.png",
-    ),
-    const HorizontalListDataModel(
-      id: 1,
-      title: "Worship",
-      imageUrl: "assets/images/h_list_item_image_demo.png",
-    ),
-    const HorizontalListDataModel(
-      id: 2,
-      title: "Reviews",
-      imageUrl: "assets/images/h_list_item_image_demo.png",
-    ),
-    const HorizontalListDataModel(
-      id: 3,
-      title: "Devotion",
-      imageUrl: "assets/images/h_list_item_image_demo.png",
-    ),
-  ];
   List<MediaDataModel> mediaDataModelList = [];
   List<CommunityCategory> categoryDataModelList = [];
   MediaDataModel? dataModel;
@@ -60,42 +34,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     fetchData();
-    // uploadImageUsingHttp();
     super.initState();
   }
-
-
-  // Future<XFile?> pickImage() async {
-  //   final imagePicker = ImagePicker();
-  //   final pickedFile = await imagePicker.pickImage(source: ImageSource.gallery);
-  //   return pickedFile;
-  // }
-  //
-  // Future<void> uploadImageUsingHttp() async {
-  //   var uri = Uri.parse('http://27.147.221.94:8083/api/ImageCapture/SubmitImageCapture');
-  //   var request = http.MultipartRequest('POST', uri);
-  //
-  //   var authorizationToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6IjEyIiwiQ2xpZW50SWQiOiIxIiwiRW1wbG95ZWVJZCI6IjciLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYXB1c2VyIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoiYXB1c2VyQGdtYWlsLmNvbSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiN2U2ZDYwY2YtZTcxMC00MTIwLWE1MWYtMDExMTlkNWJkYjlkIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9leHBpcmF0aW9uIjoiTWF5IFRodSAwOSAyMDI0IDIyOjUyOjEwIFBNIiwibmJmIjoxNzE1MjY5OTMwLCJleHAiOjE3MTUyNzM1MzAsImlzcyI6Imh0dHBzOi8vb3NhcGkuYnVub3BvcmlicmFqb2suY29tIiwiYXVkIjoiaHR0cHM6Ly9vcy5idW5vcG9yaWJyYWpvay5jb20ifQ.YdeP4657Ls4Kl5UE3FMP8OFul1q0mmJsl579tWGlc1s";
-  //   request.headers['Authorization'] = 'Bearer $authorizationToken';
-  //
-  //   pickImage().then((value) async {
-  //     var multipartFile = await http.MultipartFile.fromPath('image',  value?.path ?? '');
-  //     request.files.add(multipartFile);
-  //
-  //     request.fields['DoctorName'] = "abc";
-  //     request.fields['EmployeeId'] = "xyz";
-  //     request.fields['ImageName'] = "demo_image";
-  //     request.fields['PrescribedProducts'] = '[]';
-  //
-  //     var response = await request.send();
-  //
-  //     if (response.statusCode == 200) {
-  //       print('Image uploaded successfully!');
-  //     } else {
-  //       print('Error uploading image: ${response.reasonPhrase}');
-  //     }
-  //   });
-  // }
 
   Future<void> fetchData() async {
     final userInfoDataCollection = _firestore.collection('Users');
