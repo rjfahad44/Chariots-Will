@@ -489,6 +489,10 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  void goToPage(Widget page, BuildContext context) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+  }
+
   Widget buildHorizontalImageWithTitleListItem(CommunityCategory model) {
     return GestureDetector(
       child: Row(
