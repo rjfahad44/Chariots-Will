@@ -27,6 +27,7 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   bool _isLoggedIn = false;
   bool _loaderShow = false;
+  bool _obscureText = true;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -152,6 +153,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         child: TextField(
                           keyboardType: TextInputType.visiblePassword,
                           controller: _passwordController,
+                          obscureText: _obscureText,
                           maxLines: 1,
                           style: const TextStyle(
                               color: Colors.white,
@@ -175,6 +177,13 @@ class _SignInScreenState extends State<SignInScreen> {
                             ),
                             filled: true,
                             fillColor: const Color(0xFF292929),
+                            suffixIcon: InkWell(
+                                onTap: () {
+                                  _obscureText = !_obscureText;
+                                },
+                                child: _obscureText
+                                    ? const Icon(Icons.visibility_off)
+                                    : const Icon(Icons.visibility)),
                           ),
                         ),
                       ),
