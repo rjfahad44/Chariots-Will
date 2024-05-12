@@ -15,6 +15,7 @@ class ApiCallDemo{
 
     var bytes = await rootBundle.load('assets/images/demo_profile.png');
     var base64Image = base64Encode(bytes.buffer.asUint8List());
+    print('Base64Image Data => $base64Image');
     var data = {
       'base64Image': base64Image,
     };
