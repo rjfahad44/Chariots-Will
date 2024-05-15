@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_demo_project/Community.dart';
+import 'package:flutter_demo_project/FirestoreDb.dart';
 import 'package:flutter_demo_project/PrefsDb.dart';
 import 'package:flutter_demo_project/SignInScreen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -30,6 +32,17 @@ class _HomePageState extends State<HomePage> {
   MediaDataModel? dataModel;
   late CommunityTopBanner pageTopBannerData;
   late List<bool> _isExpandedList = [];
+  List<MediaDataModel> m = [
+    MediaDataModel(
+  audioUrl: "",
+  description: "",
+  name: "sdfg sdfasdf",
+  profileImageUrl: "",
+  subTitle: "",
+  thumb: "",
+  title: "",
+  videoUrl: ""),
+  ];
 
   @override
   void initState() {
@@ -37,7 +50,19 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+  Future<void> addMediaData(MediaDataModel mediaData, int position) async {
+    final CollectionReference mediaCollection = FirebaseFirestore.instance.collection('CommunityData');
+    final docRef = mediaCollection.doc('$position');
+    Map<String, dynamic> jsonData = mediaData.toJson();
+    await docRef.set(jsonData);
+  }
+
   Future<void> fetchData() async {
+    int position = 4;
+    for(int i=0; i<m.length; i++) {
+      var data = m[i];
+      addMediaData(data, position++);
+    };
     final userInfoDataCollection = _firestore.collection('Users');
     final pageTopBannerDataCollection = _firestore.collection('CommunityPageTopBannerData');
     final communityCategoriesCollection = _firestore.collection('CommunityCategories');
@@ -788,6 +813,17 @@ class MediaDataModel {
     required this.title,
     required this.videoUrl,
   });
+
+  Map<String, dynamic> toJson() => {
+    'audioUrl': audioUrl,
+    'description': description,
+    'name': name,
+    'profileImageUrl': profileImageUrl,
+    'subTitle': subTitle,
+    'thumb': thumb,
+    'title': title,
+    'videoUrl': videoUrl,
+  };
 
   factory MediaDataModel.fromJson(Map<String, dynamic> json) {
     return MediaDataModel(

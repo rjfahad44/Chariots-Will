@@ -455,8 +455,8 @@ class VerticalListDataModel {
 }
 
 class MediaDataModel {
-  //final int id;
   final String title;
+  final String subTitle;
   final String description;
   final String thumb;
   final String audioUrl;
@@ -465,8 +465,8 @@ class MediaDataModel {
   final String name;
 
   MediaDataModel({
-    //required this.id,
     required this.title,
+    required this.subTitle,
     required this.description,
     required this.thumb,
     required this.audioUrl,
@@ -475,10 +475,21 @@ class MediaDataModel {
     required this.name,
   });
 
+  Map<String, dynamic> toJson() => {
+    'audioUrl': audioUrl,
+    'description': description,
+    'name': name,
+    'profileImageUrl': profileImage,
+    'subTitle': subTitle,
+    'thumb': thumb,
+    'title': title,
+    'videoUrl': videoUrl,
+  };
+
   factory MediaDataModel.fromJson(Map<String, dynamic> json) {
     return MediaDataModel(
-      //id: json['id'] as int,
       title: json['title'] as String,
+      subTitle: json['subTitle'] as String,
       description: json['description'] as String,
       thumb: json['thumb'] as String,
       audioUrl: json['audioUrl'] as String,

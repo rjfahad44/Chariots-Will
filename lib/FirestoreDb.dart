@@ -3,7 +3,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'Community.dart';
+
 class FirestoreDb{
+
+  Future<void> addMediaData(MediaDataModel mediaData) async {
+    final CollectionReference mediaCollection = FirebaseFirestore.instance.collection('CommunityData');
+    final docRef = mediaCollection.doc();
+    Map<String, dynamic> jsonData = mediaData.toJson();
+    await docRef.set(jsonData);
+  }
 
   Future<void> addUserData(String name, String email, String signInBy,String userUid) async {
     final collection = FirebaseFirestore.instance.collection('Users');
