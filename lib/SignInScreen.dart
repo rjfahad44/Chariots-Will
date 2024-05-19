@@ -9,8 +9,6 @@ import 'package:flutter_demo_project/HomePage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
-import 'Community.dart';
 import 'SignUpScreen.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -179,7 +177,9 @@ class _SignInScreenState extends State<SignInScreen> {
                             fillColor: const Color(0xFF292929),
                             suffixIcon: InkWell(
                                 onTap: () {
-                                  _obscureText = !_obscureText;
+                                  setState(() {
+                                    _obscureText = !_obscureText;
+                                  });
                                 },
                                 child: _obscureText
                                     ? const Icon(Icons.visibility_off)

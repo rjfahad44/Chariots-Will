@@ -9,8 +9,6 @@ import 'package:flutter_demo_project/HomePage.dart';
 import 'package:flutter_demo_project/PrefsDb.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
-import 'Community.dart';
 import 'FirestoreDb.dart';
 import 'SignInScreen.dart';
 

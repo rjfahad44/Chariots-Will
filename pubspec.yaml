@@ -44,6 +44,9 @@ dependencies:
   google_sign_in: ^6.2.1
   http: ^0.13.4
   image_picker: ^0.8.5+1
+  table_calendar: ^3.0.6
+  horizontal_calendar: ^1.1.2
+  intl: ^0.18.1
 
 
 

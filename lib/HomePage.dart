@@ -2,16 +2,19 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_demo_project/Community.dart';
-import 'package:flutter_demo_project/FirestoreDb.dart';
 import 'package:flutter_demo_project/PrefsDb.dart';
 import 'package:flutter_demo_project/SignInScreen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'AudioPlayDialog.dart';
+import 'CustomCalendar.dart';
 import 'FirstFivePages.dart';
 import 'OtherPages.dart';
 import 'VideoPlayDialog.dart';
+import 'model/CommunityCategory.dart';
+import 'model/CommunityTopBanner.dart';
+import 'model/MediaDataModel.dart';
+import 'model/UserData.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -32,17 +35,6 @@ class _HomePageState extends State<HomePage> {
   MediaDataModel? dataModel;
   late CommunityTopBanner pageTopBannerData;
   late List<bool> _isExpandedList = [];
-  List<MediaDataModel> m = [
-    MediaDataModel(
-  audioUrl: "",
-  description: "",
-  name: "sdfg sdfasdf",
-  profileImageUrl: "",
-  subTitle: "",
-  thumb: "",
-  title: "",
-  videoUrl: ""),
-  ];
 
   @override
   void initState() {
@@ -51,27 +43,29 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> addMediaData(MediaDataModel mediaData, int position) async {
-    final CollectionReference mediaCollection = FirebaseFirestore.instance.collection('CommunityData');
+    final CollectionReference mediaCollection =
+        FirebaseFirestore.instance.collection('CommunityData');
     final docRef = mediaCollection.doc('$position');
     Map<String, dynamic> jsonData = mediaData.toJson();
     await docRef.set(jsonData);
   }
 
   Future<void> fetchData() async {
-    int position = 4;
-    for(int i=0; i<m.length; i++) {
-      var data = m[i];
-      addMediaData(data, position++);
-    };
+    // for(int i=0; i<addDataList.length; i++) {
+    //   var data = addDataList[i];
+    //   addMediaData(data, i+1);
+    // };
     final userInfoDataCollection = _firestore.collection('Users');
-    final pageTopBannerDataCollection = _firestore.collection('CommunityPageTopBannerData');
-    final communityCategoriesCollection = _firestore.collection('CommunityCategories');
+    final pageTopBannerDataCollection =
+        _firestore.collection('CommunityPageTopBannerData');
+    final communityCategoriesCollection =
+        _firestore.collection('CommunityCategories');
     final communityDataListCollection = _firestore.collection('CommunityData');
     try {
-
       final userInfoDataSnapshot = await userInfoDataCollection.get();
       final pageTopBannerDataSnapshot = await pageTopBannerDataCollection.get();
-      final communityCategoriesDataSnapshot = await communityCategoriesCollection.get();
+      final communityCategoriesDataSnapshot =
+          await communityCategoriesCollection.get();
       final communityDataSnapshot = await communityDataListCollection.get();
 
       for (var doc in userInfoDataSnapshot.docs) {
@@ -110,12 +104,12 @@ class _HomePageState extends State<HomePage> {
         print(mediaData.title);
       }
 
-
       setState(() {
         _isDataLoaded = true;
         mediaDataModelList = mediaDataList;
         categoryDataModelList = categoryDataList;
-        _isExpandedList = List.generate(mediaDataModelList.length, (index) => false);
+        _isExpandedList =
+            List.generate(mediaDataModelList.length, (index) => false);
       });
     } catch (error) {
       print(error);
@@ -143,8 +137,8 @@ class _HomePageState extends State<HomePage> {
           title: Text(
             widget.title,
             style: const TextStyle(color: Colors.white),
-            textAlign: TextAlign.center,
           ),
+          centerTitle: true,
           backgroundColor: const Color(0xFF101010),
           leading: IconButton(
             icon: const Icon(Icons.menu),
@@ -155,37 +149,40 @@ class _HomePageState extends State<HomePage> {
         ),
         drawer: _buildDrawer(scaffoldKey),
         body: _isDataLoaded
-            ? Column(
-                children: [
-                  //Top ImageView
-                  Padding(
-                    padding:  const EdgeInsets.all(10.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(16.0),
-                      child: Container(
-                        width: double.infinity,
-                        height: 150.0,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(pageTopBannerData.thumb), //AssetImage('assets/images/community_top_image_demo.png'),
-                            fit: BoxFit.cover,
+            ? SingleChildScrollView(
+                child: Column(
+                  children: [
+                    //Top ImageView
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16.0),
+                        child: Container(
+                          width: double.infinity,
+                          height: 150.0,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: NetworkImage(pageTopBannerData.thumb),
+                              //AssetImage('assets/images/community_top_image_demo.png'),
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                        ),
-                        child: Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Container(
-                            margin: const EdgeInsets.all(12),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Container(
-                                color: const Color(0xFF33363C),
-                                child:  Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 10, top: 5, right: 10, bottom: 5),
-                                  child: Text(pageTopBannerData.title,
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w700)),
+                          child: Align(
+                            alignment: Alignment.bottomLeft,
+                            child: Container(
+                              margin: const EdgeInsets.all(12),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8.0),
+                                child: Container(
+                                  color: const Color(0xFF33363C),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 10, top: 5, right: 10, bottom: 5),
+                                    child: Text(pageTopBannerData.title,
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w700)),
+                                  ),
                                 ),
                               ),
                             ),
@@ -193,31 +190,30 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-                  ),
 
-                  const SizedBox(
-                    height: 10.0,
-                  ),
-
-                  //horizontal ListView
-                  SizedBox(
-                    height: 115.0,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: categoryDataModelList.length,
-                      itemBuilder: (context, index) {
-                        final model = categoryDataModelList[index];
-                        return buildHorizontalImageWithTitleListItem(model);
-                      },
+                    const SizedBox(
+                      height: 10.0,
                     ),
-                  ),
 
-                  const SizedBox(
-                    height: 10.0,
-                  ),
+                    CustomCalendar(),
 
-                  Expanded(
-                    child: Padding(
+                    //horizontal ListView
+                    SizedBox(
+                      height: 115.0,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: categoryDataModelList.length,
+                        itemBuilder: (context, index) {
+                          final model = categoryDataModelList[index];
+                          return buildHorizontalImageWithTitleListItem(model);
+                        },
+                      ),
+                    ),
+
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Container(
                           decoration: const BoxDecoration(
@@ -255,17 +251,16 @@ class _HomePageState extends State<HomePage> {
                               const SizedBox(
                                 height: 5.0,
                               ),
-                              Expanded(
-                                child: ListView.builder(
-                                  shrinkWrap: false,
-                                  scrollDirection: Axis.vertical,
-                                  itemCount: mediaDataModelList.length,
-                                  itemBuilder: (context, index) {
-                                    final model = mediaDataModelList[index];
+                              ListView.builder(
+                                shrinkWrap: true,
+                                primary: false,
+                                scrollDirection: Axis.vertical,
+                                itemCount: mediaDataModelList.length,
+                                itemBuilder: (context, index) {
+                                  final model = mediaDataModelList[index];
 
-                                    return buildVerticalListItem(model, index);
-                                  },
-                                ),
+                                  return buildVerticalListItem(model, index);
+                                },
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(10.0),
@@ -295,8 +290,8 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                         )),
-                  ),
-                ],
+                  ],
+                ),
               )
             : const Center(
                 child: CircularProgressIndicator(),
@@ -403,7 +398,8 @@ class _HomePageState extends State<HomePage> {
                     ),
                     onPressed: () {
                       _auth.signOut().then((value) async {
-                        await PrefsDb().removeDataSP(_auth.currentUser?.email ?? "");
+                        await PrefsDb()
+                            .removeDataSP(_auth.currentUser?.email ?? "");
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
@@ -533,7 +529,8 @@ class _HomePageState extends State<HomePage> {
                     width: 70,
                     height: 70,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
+                    errorBuilder: (context, error, stackTrace) =>
+                        const Icon(Icons.error),
                   ),
                 ),
                 const SizedBox(
@@ -558,7 +555,8 @@ class _HomePageState extends State<HomePage> {
       ),
       onTap: () {
         Fluttertoast.showToast(
-            msg: "What should I do to click on the items that are not clear to me?",
+            msg:
+                "What should I do to click on the items that are not clear to me?",
             toastLength: Toast.LENGTH_LONG,
             gravity: ToastGravity.BOTTOM,
             timeInSecForIosWeb: 1,
@@ -699,142 +697,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ],
-    );
-  }
-}
-
-class HorizontalListDataModel {
-  final int id;
-  final String title;
-  final String imageUrl;
-
-  const HorizontalListDataModel({
-    required this.id,
-    required this.title,
-    required this.imageUrl,
-  });
-}
-
-class VerticalListDataModel {
-  final int id;
-  final String name;
-  final String profileImage;
-  final String description;
-  final String audioUrl;
-  final String videoUrl;
-
-  const VerticalListDataModel({
-    required this.id,
-    required this.name,
-    required this.profileImage,
-    required this.description,
-    required this.audioUrl,
-    required this.videoUrl,
-  });
-}
-
-class UserData {
-  final String email;
-  final String signInBy;
-  final String userName;
-  final String userUid;
-
-  UserData({
-    required this.email,
-    required this.signInBy,
-    required this.userName,
-    required this.userUid,
-  });
-
-  factory UserData.fromJson(DocumentSnapshot doc) {
-    Map data = doc.data() as Map<String, dynamic>;
-    return UserData(
-      email: data['email'] ?? '',
-      signInBy: data['signInBy'] ?? '',
-      userName: data['userName'] ?? '',
-      userUid: data['userUid'] ?? '',
-    );
-  }
-}
-
-class CommunityTopBanner {
-  final String title;
-  final String thumb;
-
-  CommunityTopBanner({
-    required this.title,
-    required this.thumb,
-  });
-
-  factory CommunityTopBanner.fromJson(DocumentSnapshot doc) {
-    Map data = doc.data() as Map<String, dynamic>;
-    return CommunityTopBanner(
-      title: data['title'] ?? '',
-      thumb: data['thumb'] ?? '',
-    );
-  }
-}
-
-class CommunityCategory {
-  final String title;
-  final String thumb;
-
-  CommunityCategory({
-    required this.title,
-    required this.thumb,
-  });
-
-  factory CommunityCategory.fromJson(DocumentSnapshot doc) {
-    Map data = doc.data() as Map<String, dynamic>;
-    return CommunityCategory(
-      title: data['title'] ?? '',
-      thumb: data['thumb'] ?? '',
-    );
-  }
-}
-
-class MediaDataModel {
-  final String audioUrl;
-  final String description;
-  final String name;
-  final String profileImageUrl;
-  final String subTitle;
-  final String thumb;
-  final String title;
-  final String videoUrl;
-
-  MediaDataModel({
-    required this.audioUrl,
-    required this.description,
-    required this.name,
-    required this.profileImageUrl,
-    required this.subTitle,
-    required this.thumb,
-    required this.title,
-    required this.videoUrl,
-  });
-
-  Map<String, dynamic> toJson() => {
-    'audioUrl': audioUrl,
-    'description': description,
-    'name': name,
-    'profileImageUrl': profileImageUrl,
-    'subTitle': subTitle,
-    'thumb': thumb,
-    'title': title,
-    'videoUrl': videoUrl,
-  };
-
-  factory MediaDataModel.fromJson(Map<String, dynamic> json) {
-    return MediaDataModel(
-      audioUrl: json['audioUrl'] as String,
-      description: json['description'] as String,
-      name: json['name'] as String,
-      profileImageUrl: json['profileImageUrl'] as String,
-      subTitle: json['subTitle'] as String,
-      thumb: json['thumb'] as String,
-      title: json['title'] as String,
-      videoUrl: json['videoUrl'] as String,
     );
   }
 }

@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_demo_project/Community.dart';
 import 'package:flutter_demo_project/HomePage.dart';
 import 'package:flutter_demo_project/SignInScreen.dart';
 import 'package:flutter_svg/flutter_svg.dart';
