@@ -40,3 +40,9 @@ class FirestoreDb{
     }
   }
 }
+
+Future<void> addMultiCollectionData(Map<String, dynamic> data, String collectionName) async {
+  final collection = FirebaseFirestore.instance.collection(collectionName);
+  final docRef = collection.doc('1').collection('E').doc('1');
+  await docRef.set(data);
+}

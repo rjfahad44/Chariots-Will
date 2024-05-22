@@ -74,48 +74,54 @@ class _VideoPlayerDialogState extends State<VideoPlayerDialog> {
             color: Colors.white,
           ),
         ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              width: double.infinity,
-              height: 200.0,
-              child: _controller.value.isInitialized
-                  ? AspectRatio(
-                      aspectRatio: _controller.value.aspectRatio,
-                      child: VideoPlayer(_controller),
-                    )
-                  : const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-            ),
-            const SizedBox(
-              height: 10.0,
-            ),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  if (_controller.value.isPlaying) {
-                    isPlayState = false;
-                    _controller.pause();
-                    print("pause");
-                  } else {
-                    isPlayState = true;
-                    _controller.play();
-                    print("play");
-                  }
-                });
-              },
-              child: Visibility(
-                visible:  _controller.value.isInitialized,
-                child: Icon(
-                  isPlayState ? Icons.pause : Icons.play_arrow,
-                  size: 40.0,
-                  color: Colors.white,
+        content: SizedBox(
+          width: MediaQuery.of(context).size.width - 30,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                width: double.infinity,
+                height: 200.0,
+                child: _controller.value.isInitialized
+                    ? AspectRatio(
+                  aspectRatio: _controller.value.aspectRatio,
+                  child: VideoPlayer(_controller),
+                )
+                    : const Center(
+                  child: CircularProgressIndicator(),
                 ),
               ),
-            ),
-          ],
-        ));
+              const SizedBox(
+                height: 10.0,
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    if (_controller.value.isPlaying) {
+                      isPlayState = false;
+                      _controller.pause();
+                      print("pause");
+                    } else {
+                      isPlayState = true;
+                      _controller.play();
+                      print("play");
+                    }
+                  });
+                },
+                child: Visibility(
+                  visible:  _controller.value.isInitialized,
+                  child: Icon(
+                    isPlayState ? Icons.pause : Icons.play_arrow,
+                    size: 40.0,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        insetPadding: EdgeInsets.zero,
+      contentPadding: EdgeInsets.symmetric(vertical: 8),
+    );
   }
 }

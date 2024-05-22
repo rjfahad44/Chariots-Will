@@ -5,12 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo_project/PrefsDb.dart';
 import 'package:flutter_demo_project/SignInScreen.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'AudioPlayDialog.dart';
 import 'CustomCalendar.dart';
 import 'FirstFivePages.dart';
 import 'OtherPages.dart';
 import 'VideoPlayDialog.dart';
+import 'model/AudioItem.dart';
 import 'model/CommunityCategory.dart';
 import 'model/CommunityTopBanner.dart';
 import 'model/MediaDataModel.dart';
@@ -30,15 +32,27 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool _isDataLoaded = false;
+  bool isDayDataEmpty = false;
+  bool loadMoreData = true;
   List<MediaDataModel> mediaDataModelList = [];
   List<CommunityCategory> categoryDataModelList = [];
+  List<AudioItem> audioItems = [];
+  int mCount = 0;
+  int eCount = 0;
   MediaDataModel? dataModel;
   late CommunityTopBanner pageTopBannerData;
   late List<bool> _isExpandedList = [];
+  String selectedMonth = "";
+  DateTime todayDay = DateTime.now();
 
   @override
   void initState() {
+    setState(() {
+      todayDay = DateTime.now();
+      selectedMonth = DateFormat("MMMM").format(DateTime.now());
+    });
     fetchData();
+    getDataByMonthAndDate();
     super.initState();
   }
 
@@ -50,58 +64,79 @@ class _HomePageState extends State<HomePage> {
     await docRef.set(jsonData);
   }
 
+  Future<void> getDataByMonthAndDate() async {
+    final monthData = _firestore.collection(selectedMonth);
+    // final snapshotM = await monthData.doc('${todayDay.day}').collection('M').get();
+    // final snapshotE = await monthData.doc('${todayDay.day}').collection('E').get();
+    // print('Morning Data : ${snapshotM.docs}');
+    // print('Evening Data : ${snapshotE.docs}');
+
+    final snapshots = await Future.wait([
+      monthData.doc('${todayDay.day}').collection('M').get(),
+      monthData.doc('${todayDay.day}').collection('E').get(),
+    ]);
+    audioItems.clear();
+    for (var i = 0; i < snapshots.length; i++) {
+      final snapshot = snapshots[i];
+      final collectionName = i == 0 ? 'Morning' : 'Evening';
+      for (var doc in snapshot.docs) {
+        final data = doc.data();
+        print('$collectionName Data : $data');
+        final audioItem = AudioItem.fromJson(doc);
+        audioItems.add(audioItem);
+      }
+    }
+    setState(() {
+      isDayDataEmpty = audioItems.isNotEmpty;
+      mCount = 0;
+      eCount = 0;
+    });
+    print('Data Size: ${audioItems.length}');
+  }
+
   Future<void> fetchData() async {
     // for(int i=0; i<addDataList.length; i++) {
     //   var data = addDataList[i];
     //   addMediaData(data, i+1);
     // };
-    final userInfoDataCollection = _firestore.collection('Users');
-    final pageTopBannerDataCollection =
-        _firestore.collection('CommunityPageTopBannerData');
-    final communityCategoriesCollection =
-        _firestore.collection('CommunityCategories');
-    final communityDataListCollection = _firestore.collection('CommunityData');
-    try {
-      final userInfoDataSnapshot = await userInfoDataCollection.get();
-      final pageTopBannerDataSnapshot = await pageTopBannerDataCollection.get();
-      final communityCategoriesDataSnapshot =
-          await communityCategoriesCollection.get();
-      final communityDataSnapshot = await communityDataListCollection.get();
 
-      for (var doc in userInfoDataSnapshot.docs) {
+    try {
+      final userInfoDataCollection = await _firestore.collection('Users').get();
+      final pageTopBannerDataCollection = await _firestore.collection('CommunityPageTopBannerData').get();
+      final communityCategoriesCollection = await _firestore.collection('CommunityCategories').get();
+      final communityDataListCollection = await _firestore.collection('CommunityData').get();
+
+      for (var doc in userInfoDataCollection.docs) {
         final data = doc.data();
         print('userInfoDataSnapshot : $data');
         final user = UserData.fromJson(doc);
         print('User userName : ${user.userName} \n');
       }
 
-      for (var doc in pageTopBannerDataSnapshot.docs) {
+      for (var doc in pageTopBannerDataCollection.docs) {
         final data = doc.data();
         print('pageTopBannerDataSnapshot : $data');
         final topBannerData = CommunityTopBanner.fromJson(doc);
         setState(() {
           pageTopBannerData = topBannerData;
         });
-        print('topBannerData title: ${topBannerData.title} \n');
       }
 
       List<CommunityCategory> categoryDataList = [];
-      for (var doc in communityCategoriesDataSnapshot.docs) {
+      for (var doc in communityCategoriesCollection.docs) {
         final data = doc.data();
         print('communityCategoriesDataSnapshot : $data');
         final category = CommunityCategory.fromJson(doc);
         categoryDataList.add(category);
-        print('Category name : ${category.title} \n');
       }
 
       List<MediaDataModel> mediaDataList = [];
-      for (var document in communityDataSnapshot.docs) {
+      for (var document in communityDataListCollection.docs) {
         final data = document.data();
         print('communityDataSnapshot : $data');
         final mediaData = MediaDataModel.fromJson(data);
         dataModel = mediaData;
         mediaDataList.add(mediaData);
-        print(mediaData.title);
       }
 
       setState(() {
@@ -195,7 +230,25 @@ class _HomePageState extends State<HomePage> {
                       height: 10.0,
                     ),
 
-                    CustomCalendar(),
+                    CustomCalendar(dateSelectCallBack: (DateTime dateTime) {
+                      setState(() {
+                        todayDay = dateTime;
+                      });
+                      var weekName = DateFormat('EEEE').format(dateTime);
+                      var monthName = DateFormat('MMMM').format(dateTime);
+                      getDataByMonthAndDate();
+                      print("Selected Date : ${todayDay.day}, $weekName, $monthName ");
+                    },
+                      monthSelectCallBack: (DateTime dateTime) async {
+                        var day = dateTime.day;
+                        var weekName = DateFormat('EEEE').format(dateTime);
+                        setState(() {
+                          selectedMonth = DateFormat('MMMM').format(dateTime);;
+                        });
+                        getDataByMonthAndDate();
+                        print("Selected Month : $day, ${todayDay.day}, $weekName, $selectedMonth ");
+                      },
+                    ),
 
                     //horizontal ListView
                     SizedBox(
@@ -213,6 +266,7 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(
                       height: 10.0,
                     ),
+                    loadMoreData ?
                     Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Container(
@@ -248,9 +302,99 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     )),
                               ),
+
                               const SizedBox(
-                                height: 5.0,
+                                height: 15.0,
                               ),
+
+
+                              Visibility(
+                                visible: isDayDataEmpty,
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  primary: false,
+                                  scrollDirection: Axis.vertical,
+                                  itemCount: audioItems.length,
+                                  itemBuilder: (context, index) {
+                                    final model = audioItems[index];
+                                    if(model.type == 'Morning') {
+                                      mCount++;
+                                      model.type = 'Morning $mCount';
+                                    }
+                                    if(model.type == 'Evening') {
+                                      eCount++;
+                                      model.type = 'Evening $eCount';
+                                    }
+                                    return Container(
+                                      decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                                        color: Color(0xFF1F1F1F),
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            model.type,
+                                            style: const TextStyle(
+                                              color: Colors.orange,
+                                              fontSize: 18.0,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Align(
+                                              alignment: Alignment.topLeft,
+                                              child: Text(
+                                                model.type,
+                                                style: const TextStyle(
+                                                  color: Colors.orange,
+                                                  fontSize: 14.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+                                          SizedBox(height: 10,),
+
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: OutlinedButton.icon(
+                                              onPressed: () {
+                                                showAudioPlayerDialog(context, model.audioUrl);
+                                              },
+                                              icon: const Icon(
+                                                Icons.volume_up_outlined,
+                                                color: Colors.white,
+                                              ),
+                                              label: const Text(
+                                                'Play Audio',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 16.0,
+                                                    fontWeight: FontWeight.w600),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              style: OutlinedButton.styleFrom(
+                                                minimumSize: const Size(double.infinity, 48.0),
+                                                side: const BorderSide(color: Color(0xFF383838)),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(100.0),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+
+                              SizedBox(height: 15,),
+
                               ListView.builder(
                                 shrinkWrap: true,
                                 primary: false,
@@ -265,9 +409,13 @@ class _HomePageState extends State<HomePage> {
                               Padding(
                                 padding: const EdgeInsets.all(10.0),
                                 child: TextButton(
-                                  onPressed: () {
+                                  onPressed: () async {
                                     setState(() {
-                                      //Add your load more logic
+                                      loadMoreData = false;
+                                    });
+                                    await Future.delayed(Duration(seconds: 2));
+                                    setState(() {
+                                      loadMoreData = true;
                                     });
                                   },
                                   style: TextButton.styleFrom(
@@ -289,7 +437,8 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ],
                           ),
-                        )),
+                        )) :
+                    CircularProgressIndicator(),
                   ],
                 ),
               )
