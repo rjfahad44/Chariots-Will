@@ -162,3 +162,39 @@ List<MediaDataModel> addDataList = [
     videoUrl: "https://firebasestorage.googleapis.com/v0/b/charriotswill.appspot.com/o/videos%2FCommunity%2F39.%20Your%20Glory%20%20Nothing%20But%20the%20Blood%20(Live)%20(All%20Sons%20%26%20Daughters).mp4?alt=media&token=642f9ce7-2d3f-4f28-a74b-ab7f2f1cf0db",
   ),
 ];
+
+
+
+final audioDataMorning = [
+  {
+    'title': 'Matthew-1',
+    'subTitle': 'Matthew-1',
+    'audioUrl': 'https://firebasestorage.googleapis.com/v0/b/charriotswill.appspot.com/o/audios%2FJanuary%2FM_matthew_01.mp3?alt=media&token=cc3fa513-e143-4e40-a869-94e90eaee824',
+    'description': '',
+    'type': 'Morning',
+  },
+  {
+    'title': 'Matthew-2',
+    'subTitle': 'Matthew-2',
+    'audioUrl': 'https://firebasestorage.googleapis.com/v0/b/charriotswill.appspot.com/o/audios%2FJanuary%2FM_matthew_02.mp3?alt=media&token=01cdcce0-c19a-454a-adff-10427f2bea71',
+    'description': '',
+    'type': 'Morning',
+  },
+];
+
+final audioDataEvening = [
+  {
+    'title': 'Genesis-1-2',
+    'subTitle': 'Genesis-1-2',
+    'audioUrl': 'https://firebasestorage.googleapis.com/v0/b/charriotswill.appspot.com/o/audios%2FJanuary%2FE_genesis-01_02.mp3?alt=media&token=62834472-b8b0-46c9-b682-e01f99a73c83',
+    'description': '',
+    'type': 'Evening',
+  },
+  {
+    'title': 'Genesis-3-5',
+    'subTitle': 'Genesis-3-5',
+    'audioUrl': 'https://firebasestorage.googleapis.com/v0/b/charriotswill.appspot.com/o/audios%2FJanuary%2FE_genesis-03_05.mp3?alt=media&token=8e12cb8e-ce1c-4f64-953c-d42ab177f087',
+    'description': '',
+    'type': 'Evening',
+  },
+];

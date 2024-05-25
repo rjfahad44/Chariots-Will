@@ -61,7 +61,10 @@ class _AudioPlayerDialogState extends State<AudioPlayerDialog> {
   }
 
   @override
-  void dispose() {
+  Future<void> dispose() async {
+    if (audioPlayerState != PlayerState.stopped) {
+      _stop();
+    }
     audioPlayer.release();
     super.dispose();
   }
@@ -96,9 +99,9 @@ class _AudioPlayerDialogState extends State<AudioPlayerDialog> {
       isPlayPause = false;
     });
     await audioPlayer.stop();
-    if (mounted) {
-      Navigator.pop(context);
-    }
+    // if (mounted) {
+    //   Navigator.pop(context);
+    // }
   }
 
   String _formatDuration(Duration duration) {
@@ -122,8 +125,11 @@ class _AudioPlayerDialogState extends State<AudioPlayerDialog> {
           ),
           GestureDetector(
             onTap: () {
-              if (audioPlayerState != PlayerState.stopped) {
-                _stop();
+              // if (audioPlayerState != PlayerState.stopped) {
+              //   _stop();
+              // }
+              if (mounted) {
+                Navigator.pop(context);
               }
             },
             child: Icon(

@@ -35,6 +35,7 @@ class _HomePageState extends State<HomePage> {
   bool isDayDataEmpty = false;
   bool loadMoreData = true;
   List<MediaDataModel> mediaDataModelList = [];
+  List<MediaDataModel> mediaDataModelListCopy = [];
   List<CommunityCategory> categoryDataModelList = [];
   List<AudioItem> audioItems = [];
   int mCount = 0;
@@ -142,9 +143,13 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         _isDataLoaded = true;
         mediaDataModelList = mediaDataList;
+       // mediaDataModelList.sort((a, b) => a.name.compareTo(b.name));
+        mediaDataModelList.sort((a, b) => a.name.length - b.name.length);
+        mediaDataModelListCopy = mediaDataModelList;
         categoryDataModelList = categoryDataList;
-        _isExpandedList =
-            List.generate(mediaDataModelList.length, (index) => false);
+        categoryDataModelList.sort((a, b) => a.title.compareTo(b.title));
+        categoryDataModelList.first.defaultSelectedItem(categoryDataModelList);
+        _isExpandedList = List.generate(mediaDataModelList.length, (index) => false);
       });
     } catch (error) {
       print(error);
@@ -230,6 +235,19 @@ class _HomePageState extends State<HomePage> {
                       height: 10.0,
                     ),
 
+                    //horizontal ListView
+                    SizedBox(
+                      height: 115.0,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: categoryDataModelList.length,
+                        itemBuilder: (context, index) {
+                          final model = categoryDataModelList[index];
+                          return buildHorizontalImageWithTitleListItem(model);
+                        },
+                      ),
+                    ),
+
                     CustomCalendar(dateSelectCallBack: (DateTime dateTime) {
                       setState(() {
                         todayDay = dateTime;
@@ -250,22 +268,10 @@ class _HomePageState extends State<HomePage> {
                       },
                     ),
 
-                    //horizontal ListView
-                    SizedBox(
-                      height: 115.0,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: categoryDataModelList.length,
-                        itemBuilder: (context, index) {
-                          final model = categoryDataModelList[index];
-                          return buildHorizontalImageWithTitleListItem(model);
-                        },
-                      ),
-                    ),
-
                     const SizedBox(
                       height: 10.0,
                     ),
+
                     loadMoreData ?
                     Padding(
                         padding: const EdgeInsets.all(10.0),
@@ -308,6 +314,7 @@ class _HomePageState extends State<HomePage> {
                               ),
 
 
+                              // Calendar Items List //
                               Visibility(
                                 visible: isDayDataEmpty,
                                 child: ListView.builder(
@@ -345,13 +352,29 @@ class _HomePageState extends State<HomePage> {
                                             padding: const EdgeInsets.all(8.0),
                                             child: Align(
                                               alignment: Alignment.topLeft,
-                                              child: Text(
-                                                model.type,
-                                                style: const TextStyle(
-                                                  color: Colors.orange,
-                                                  fontSize: 14.0,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    model.title,
+                                                    style: const TextStyle(
+                                                      color: Colors.lightBlueAccent,
+                                                      fontSize: 14.0,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                                  ),
+
+                                                  SizedBox(height: 10,),
+
+                                                  Text(
+                                                    model.description??"",
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16.0,
+                                                      fontWeight: FontWeight.normal,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                           ),
@@ -685,17 +708,22 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 8.0,
                 ),
-                Expanded(
-                  child: Text(
-                    model.title,
-                    style: const TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.white,
-                    ),
-                    textAlign: TextAlign.justify,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                ValueListenableBuilder<bool>(
+                  valueListenable: model.isSelected,
+                  builder: (context, isSelected, _) {
+                    return Expanded(
+                      child: Text(
+                        model.title,
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          color: isSelected? Colors.greenAccent: Colors.white,
+                        ),
+                        textAlign: TextAlign.justify,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -703,15 +731,26 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       onTap: () {
-        Fluttertoast.showToast(
-            msg:
-                "What should I do to click on the items that are not clear to me?",
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        setState(() {
+          model.toggleSelectionOne(categoryDataModelList);
+          setState(() {
+            loadMoreData = false;
+          });
+          setState(() {
+            if(model.title == "Prayer"){
+              mediaDataModelList = mediaDataModelListCopy.sublist(0,3);
+            }else if(model.title == "Worship"){
+              mediaDataModelList = mediaDataModelListCopy.sublist(3,6);
+            }else if(model.title == "Reviews"){
+              mediaDataModelList = mediaDataModelListCopy.sublist(6,9);
+            }else if(model.title == "Devotion"){
+              mediaDataModelList = mediaDataModelListCopy.sublist(9,12);
+            }else{
+              mediaDataModelList = mediaDataModelListCopy;
+            }
+            loadMoreData = true;
+          });
+        });
       },
     );
   }
