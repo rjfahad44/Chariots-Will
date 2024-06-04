@@ -1,14 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'HomePage.dart';
-import 'model/MediaDataModel.dart';
+import '../Screens/HomePage.dart';
+import '../model/MediaDataModel.dart';
 
 class FirestoreDb{
 
   Future<void> addMediaData(MediaDataModel mediaData, int position) async {
-    final CollectionReference mediaCollection = FirebaseFirestore.instance.collection('CommunityData');
+    final CollectionReference mediaCollection = FirebaseFirestore.instance.collection('Worship');
     final docRef = mediaCollection.doc('$position');
     Map<String, dynamic> jsonData = mediaData.toJson();
+    print("insert data : $jsonData \n");
     await docRef.set(jsonData);
   }
 

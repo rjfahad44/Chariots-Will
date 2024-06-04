@@ -3,7 +3,7 @@ class MediaDataModel {
   final String description;
   final String name;
   final String profileImageUrl;
-  final String subTitle;
+  final int position;
   final String thumb;
   final String title;
   final String videoUrl;
@@ -13,7 +13,7 @@ class MediaDataModel {
     required this.description,
     required this.name,
     required this.profileImageUrl,
-    required this.subTitle,
+    required this.position,
     required this.thumb,
     required this.title,
     required this.videoUrl,
@@ -24,7 +24,7 @@ class MediaDataModel {
     'description': description,
     'name': name,
     'profileImageUrl': profileImageUrl,
-    'subTitle': subTitle,
+    'position': position,
     'thumb': thumb,
     'title': title,
     'videoUrl': videoUrl,
@@ -36,7 +36,7 @@ class MediaDataModel {
       description: json['description'] as String,
       name: json['name'] as String,
       profileImageUrl: json['profileImageUrl'] as String,
-      subTitle: json['subTitle'] as String,
+      position: json['position'] as int,
       thumb: json['thumb'] as String,
       title: json['title'] as String,
       videoUrl: json['videoUrl'] as String,

@@ -2,21 +2,23 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_demo_project/PrefsDb.dart';
-import 'package:flutter_demo_project/SignInScreen.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_demo_project/Screens/CategoryDataShowScreen.dart';
+import 'package:flutter_demo_project/firebaseDB/FirestoreDb.dart';
+import 'package:flutter_demo_project/preferences/PrefsDb.dart';
+import 'package:flutter_demo_project/utils/Constants.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'AudioPlayDialog.dart';
-import 'CustomCalendar.dart';
+import '../utils/AudioPlayDialog.dart';
+import '../CustomCalendar.dart';
 import 'FirstFivePages.dart';
 import 'OtherPages.dart';
-import 'VideoPlayDialog.dart';
-import 'model/AudioItem.dart';
-import 'model/CommunityCategory.dart';
-import 'model/CommunityTopBanner.dart';
-import 'model/MediaDataModel.dart';
-import 'model/UserData.dart';
+import '../utils/VideoPlayDialog.dart';
+import '../model/AudioItem.dart';
+import '../model/CommunityCategory.dart';
+import '../model/CommunityTopBanner.dart';
+import '../model/MediaDataModel.dart';
+import '../model/UserData.dart';
+import 'SignInScreen.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -35,7 +37,6 @@ class _HomePageState extends State<HomePage> {
   bool isDayDataEmpty = false;
   bool loadMoreData = true;
   List<MediaDataModel> mediaDataModelList = [];
-  List<MediaDataModel> mediaDataModelListCopy = [];
   List<CommunityCategory> categoryDataModelList = [];
   List<AudioItem> audioItems = [];
   int mCount = 0;
@@ -45,9 +46,16 @@ class _HomePageState extends State<HomePage> {
   late List<bool> _isExpandedList = [];
   String selectedMonth = "";
   DateTime todayDay = DateTime.now();
+  final firestoreDB = FirestoreDb();
 
   @override
   void initState() {
+
+    // for(int i=0; i<addDataList.length; i++) {
+    //   var data = addDataList[i];
+    //   firestoreDB.addMediaData(data, i+1);
+    // };
+
     setState(() {
       todayDay = DateTime.now();
       selectedMonth = DateFormat("MMMM").format(DateTime.now());
@@ -57,20 +65,8 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  Future<void> addMediaData(MediaDataModel mediaData, int position) async {
-    final CollectionReference mediaCollection =
-        FirebaseFirestore.instance.collection('CommunityData');
-    final docRef = mediaCollection.doc('$position');
-    Map<String, dynamic> jsonData = mediaData.toJson();
-    await docRef.set(jsonData);
-  }
-
   Future<void> getDataByMonthAndDate() async {
     final monthData = _firestore.collection(selectedMonth);
-    // final snapshotM = await monthData.doc('${todayDay.day}').collection('M').get();
-    // final snapshotE = await monthData.doc('${todayDay.day}').collection('E').get();
-    // print('Morning Data : ${snapshotM.docs}');
-    // print('Evening Data : ${snapshotE.docs}');
 
     final snapshots = await Future.wait([
       monthData.doc('${todayDay.day}').collection('M').get(),
@@ -96,11 +92,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> fetchData() async {
-    // for(int i=0; i<addDataList.length; i++) {
-    //   var data = addDataList[i];
-    //   addMediaData(data, i+1);
-    // };
-
     try {
       final userInfoDataCollection = await _firestore.collection('Users').get();
       final pageTopBannerDataCollection = await _firestore.collection('CommunityPageTopBannerData').get();
@@ -142,13 +133,12 @@ class _HomePageState extends State<HomePage> {
 
       setState(() {
         _isDataLoaded = true;
+        print("mediaDataList Size : ${mediaDataList.length}");
         mediaDataModelList = mediaDataList;
-       // mediaDataModelList.sort((a, b) => a.name.compareTo(b.name));
-        mediaDataModelList.sort((a, b) => a.name.length - b.name.length);
-        mediaDataModelListCopy = mediaDataModelList;
+        mediaDataModelList.sort((a, b) => a.position - b.position);
         categoryDataModelList = categoryDataList;
         categoryDataModelList.sort((a, b) => a.title.compareTo(b.title));
-        categoryDataModelList.first.defaultSelectedItem(categoryDataModelList);
+        // categoryDataModelList.first.defaultSelectedItem(categoryDataModelList);
         _isExpandedList = List.generate(mediaDataModelList.length, (index) => false);
       });
     } catch (error) {
@@ -701,8 +691,7 @@ class _HomePageState extends State<HomePage> {
                     width: 70,
                     height: 70,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) =>
-                        const Icon(Icons.error),
+                    errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
                   ),
                 ),
                 const SizedBox(
@@ -733,23 +722,7 @@ class _HomePageState extends State<HomePage> {
       onTap: () {
         setState(() {
           model.toggleSelectionOne(categoryDataModelList);
-          setState(() {
-            loadMoreData = false;
-          });
-          setState(() {
-            if(model.title == "Prayer"){
-              mediaDataModelList = mediaDataModelListCopy.sublist(0,3);
-            }else if(model.title == "Worship"){
-              mediaDataModelList = mediaDataModelListCopy.sublist(3,6);
-            }else if(model.title == "Reviews"){
-              mediaDataModelList = mediaDataModelListCopy.sublist(6,9);
-            }else if(model.title == "Devotion"){
-              mediaDataModelList = mediaDataModelListCopy.sublist(9,12);
-            }else{
-              mediaDataModelList = mediaDataModelListCopy;
-            }
-            loadMoreData = true;
-          });
+          goToPage(CategoryDataShowScreen(title: model.title), context);
         });
       },
     );
