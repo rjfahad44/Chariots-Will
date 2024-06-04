@@ -66,7 +66,7 @@ class _categoryDataShowScreenState extends State<CategoryDataShowScreen> {
       final Uint8List? thumbnail = await VideoThumbnail.thumbnailData(
         video: videoUrl,
         imageFormat: ImageFormat.PNG,
-        maxWidth: 128,
+        maxWidth: 720,
         quality: 60,
       );
       return thumbnail;
@@ -189,7 +189,7 @@ class _categoryDataShowScreenState extends State<CategoryDataShowScreen> {
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width - 20,
-                    height: 160.0,
+                    height: 180.0,
                     decoration: BoxDecoration(
                       image: _thumbnails[index] != null
                           ? DecorationImage(
