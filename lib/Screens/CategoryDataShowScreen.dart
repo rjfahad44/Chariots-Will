@@ -30,6 +30,7 @@ class _categoryDataShowScreenState extends State<CategoryDataShowScreen> {
     getData().then((value) {
       setState(() {
         mediaDataModelList = value;
+        mediaDataModelList.sort((a, b) => a.position - b.position);
         _isExpandedList = List.generate(mediaDataModelList.length, (index) => false);
         _thumbnails = List<Uint8List?>.filled(mediaDataModelList.length, null);
         _generateThumbnails();
