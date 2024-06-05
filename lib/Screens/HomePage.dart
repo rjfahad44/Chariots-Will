@@ -93,17 +93,16 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> fetchData() async {
     try {
-      final userInfoDataCollection = await _firestore.collection('Users').get();
+      final userInfoData = await _firestore.collection('Users').doc('${_auth.currentUser?.uid}').get();
       final pageTopBannerDataCollection = await _firestore.collection('CommunityPageTopBannerData').get();
       final communityCategoriesCollection = await _firestore.collection('CommunityCategories').get();
       final communityDataListCollection = await _firestore.collection('CommunityData').get();
 
-      for (var doc in userInfoDataCollection.docs) {
-        final data = doc.data();
-        print('userInfoDataSnapshot : $data');
-        final user = UserData.fromJson(doc);
-        print('User userName : ${user.userName} \n');
-      }
+      userData = UserData.fromJson(userInfoData);
+      print('User userName : ${userData.userName} \n');
+      print('User email : ${userData.email} \n');
+      print('User userUid : ${userData.userUid} \n');
+
 
       for (var doc in pageTopBannerDataCollection.docs) {
         final data = doc.data();

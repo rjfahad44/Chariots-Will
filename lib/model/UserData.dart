@@ -7,10 +7,10 @@ class UserData {
   final String userUid;
 
   UserData({
-    required this.email,
-    required this.signInBy,
-    required this.userName,
-    required this.userUid,
+    this.email = '',
+    this.signInBy = '',
+    this.userName = '',
+    this.userUid = '',
   });
 
   factory UserData.fromJson(DocumentSnapshot doc) {

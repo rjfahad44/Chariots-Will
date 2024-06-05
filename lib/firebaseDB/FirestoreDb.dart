@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../Screens/HomePage.dart';
 import '../model/MediaDataModel.dart';
+import '../model/NoteModel.dart';
 
 class FirestoreDb{
 
@@ -11,6 +12,34 @@ class FirestoreDb{
     Map<String, dynamic> jsonData = mediaData.toJson();
     print("insert data : $jsonData \n");
     await docRef.set(jsonData);
+  }
+
+  Future<void> addNote(NoteModel note, String uid) async {
+    try {
+      final collection = FirebaseFirestore.instance.collection("UsersNote");
+      final noteDoc = collection.doc(uid);
+      Map<String, dynamic> jsonData = note.toJson();
+      print('Add adding... : $jsonData');
+      await noteDoc.set(jsonData);
+      print('Note added successfully');
+    } catch (e) {
+      print('Error adding note: $e');
+    }
+  }
+
+  Future<void> updateNote(NoteModel note, String uid) async {
+    final CollectionReference noteCollection = FirebaseFirestore.instance.collection('UsersNote');
+    final docRef = noteCollection.doc(uid);
+    Map<String, dynamic> jsonData = note.toJson();
+    print('Update Note : ${jsonData}');
+    await docRef.update(jsonData);
+  }
+
+  Future<void> deleteNote(String uid) async {
+    final CollectionReference noteCollection = FirebaseFirestore.instance.collection('UsersNote');
+    final docRef = noteCollection.doc(uid);
+    print('Delete Note : ${docRef}');
+    await docRef.delete();
   }
 
   Future<void> addUserData(String name, String email, String signInBy,String userUid) async {

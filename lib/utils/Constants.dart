@@ -1,5 +1,20 @@
+import 'package:flutter_demo_project/model/UserData.dart';
+import 'package:intl/intl.dart';
+
 import '../Screens/HomePage.dart';
 import '../model/MediaDataModel.dart';
+
+
+
+UserData userData = UserData();
+
+String getFormattedDate() {
+  final now = DateTime.now();
+  final formatter = DateFormat('MMMM-dd-yyyy');
+  final formattedDate = formatter.format(now);
+  return formattedDate;
+}
+
 
 List<MediaDataModel> addDataList = [
 

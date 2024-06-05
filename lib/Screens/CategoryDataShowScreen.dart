@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_demo_project/Screens/NoteScreen.dart';
+import 'package:flutter_demo_project/model/NoteModel.dart';
+import 'package:flutter_demo_project/utils/Constants.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 import '../model/MediaDataModel.dart';
 import '../utils/VideoPlayDialog.dart';
@@ -31,7 +34,8 @@ class _categoryDataShowScreenState extends State<CategoryDataShowScreen> {
       setState(() {
         mediaDataModelList = value;
         mediaDataModelList.sort((a, b) => a.position - b.position);
-        _isExpandedList = List.generate(mediaDataModelList.length, (index) => false);
+        _isExpandedList =
+            List.generate(mediaDataModelList.length, (index) => false);
         _thumbnails = List<Uint8List?>.filled(mediaDataModelList.length, null);
         _generateThumbnails();
         isDataLoad = true;
@@ -40,7 +44,8 @@ class _categoryDataShowScreenState extends State<CategoryDataShowScreen> {
   }
 
   Future<List<MediaDataModel>> getData() async {
-    final communityDataListCollection = await _firestore.collection(widget.title).get();
+    final communityDataListCollection =
+        await _firestore.collection(widget.title).get();
     List<MediaDataModel> mediaDataList = [];
     for (var document in communityDataListCollection.docs) {
       final data = document.data();
@@ -86,42 +91,54 @@ class _categoryDataShowScreenState extends State<CategoryDataShowScreen> {
           widget.title,
           style: const TextStyle(color: Colors.white),
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                goToPage(
+                    NoteScreen(title: "Note", subUid: widget.title), context);
+              },
+              icon: Icon(
+                Icons.note_alt_outlined,
+                color: Colors.white,
+              )),
+        ],
         centerTitle: true,
         backgroundColor: const Color(0xFF101010),
       ),
-      body: isDataLoad?
-      mediaDataModelList.isNotEmpty ?
-      Container(
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                itemCount: mediaDataModelList.length,
-                itemBuilder: (context, index) {
-                  final model = mediaDataModelList[index];
-                  return buildVerticalListItem(model, index);
-                },
-              ),
+      body: isDataLoad
+          ? mediaDataModelList.isNotEmpty
+              ? Container(
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          itemCount: mediaDataModelList.length,
+                          itemBuilder: (context, index) {
+                            final model = mediaDataModelList[index];
+                            return buildVerticalListItem(model, index);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    "Empty!!",
+                    style: TextStyle(
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                )
+          : Align(
+              alignment: Alignment.center,
+              child: CircularProgressIndicator(),
             ),
-          ],
-        ),
-      ): Align(
-        alignment: Alignment.center,
-        child: Text(
-          "Empty!!",
-          style: TextStyle(
-            fontSize: 24.0,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-      ) :
-      Align(
-        alignment: Alignment.center,
-        child: CircularProgressIndicator(),
-      ),
     );
   }
 
@@ -150,7 +167,8 @@ class _categoryDataShowScreenState extends State<CategoryDataShowScreen> {
           ],
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 10.0, top: 10, right: 10, bottom: 10),
+          padding:
+              const EdgeInsets.only(left: 10.0, top: 10, right: 10, bottom: 10),
           child: Column(
             children: [
               Text(
@@ -160,7 +178,9 @@ class _categoryDataShowScreenState extends State<CategoryDataShowScreen> {
                     fontSize: 18.0,
                     fontWeight: FontWeight.w400),
                 maxLines: _isExpandedList[index] ? null : 3,
-                overflow: _isExpandedList[index] ? TextOverflow.visible : TextOverflow.ellipsis,
+                overflow: _isExpandedList[index]
+                    ? TextOverflow.visible
+                    : TextOverflow.ellipsis,
               ),
               Align(
                 alignment: Alignment.bottomRight,
@@ -193,9 +213,9 @@ class _categoryDataShowScreenState extends State<CategoryDataShowScreen> {
                     decoration: BoxDecoration(
                       image: _thumbnails[index] != null
                           ? DecorationImage(
-                        image: MemoryImage(_thumbnails[index]!),
-                        fit: BoxFit.cover,
-                      )
+                              image: MemoryImage(_thumbnails[index]!),
+                              fit: BoxFit.cover,
+                            )
                           : null,
                       borderRadius: BorderRadius.circular(12.0),
                       color: const Color(0xFF2E2E2E),
@@ -217,5 +237,9 @@ class _categoryDataShowScreenState extends State<CategoryDataShowScreen> {
         ),
       ],
     );
+  }
+
+  void goToPage(Widget page, BuildContext context) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => page));
   }
 }

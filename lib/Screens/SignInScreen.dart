@@ -6,6 +6,7 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_demo_project/Screens/HomePage.dart';
+import 'package:flutter_demo_project/utils/Constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -244,13 +245,13 @@ class _SignInScreenState extends State<SignInScreen> {
                                 if (data?.user != null) {
                                   setState(() {
                                     _isLoggedIn = true;
-                                    print("if _isLoggedIn : $_isLoggedIn");
+                                    print("login success : ${data?.user}");
                                   });
                                 } else {
                                   setState(() {
                                     _isLoggedIn = false;
                                     print(
-                                        "else _isLoggedIn : $_isLoggedIn");
+                                        "login failed");
                                   });
                                 }
                               });
