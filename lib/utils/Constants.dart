@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_demo_project/model/UserData.dart';
 import 'package:intl/intl.dart';
 
@@ -13,6 +15,15 @@ String getFormattedDate() {
   final formatter = DateFormat('MMMM-dd-yyyy');
   final formattedDate = formatter.format(now);
   return formattedDate;
+}
+
+void goToPage(Widget page, bool isBackPage, BuildContext context) {
+  if (isBackPage) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+  } else {
+    Navigator.pushAndRemoveUntil(
+        context, MaterialPageRoute(builder: (context) => page),(Route<dynamic> dynamic) => false);
+  }
 }
 
 

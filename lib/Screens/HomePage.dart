@@ -1,3 +1,4 @@
+
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,7 +10,8 @@ import 'package:flutter_demo_project/utils/Constants.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../utils/AudioPlayDialog.dart';
-import '../CustomCalendar.dart';
+import '../utils/CustomCalendar.dart';
+import 'DevotionScreen.dart';
 import 'FirstFivePages.dart';
 import 'OtherPages.dart';
 import '../utils/VideoPlayDialog.dart';
@@ -20,8 +22,6 @@ import '../model/MediaDataModel.dart';
 import '../model/UserData.dart';
 import 'SignInScreen.dart';
 
-final FirebaseAuth _auth = FirebaseAuth.instance;
-final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
@@ -33,20 +33,26 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final firestoreDB = FirestoreDb();
+
   bool _isDataLoaded = false;
   bool isDayDataEmpty = false;
   bool loadMoreData = true;
+
   List<MediaDataModel> mediaDataModelList = [];
   List<CommunityCategory> categoryDataModelList = [];
   List<AudioItem> audioItems = [];
-  int mCount = 0;
-  int eCount = 0;
+  late List<bool> _isExpandedList = [];
   MediaDataModel? dataModel;
   late CommunityTopBanner pageTopBannerData;
-  late List<bool> _isExpandedList = [];
+
+  int mCount = 0;
+  int eCount = 0;
   String selectedMonth = "";
   DateTime todayDay = DateTime.now();
-  final firestoreDB = FirestoreDb();
 
   @override
   void initState() {
@@ -137,7 +143,6 @@ class _HomePageState extends State<HomePage> {
         mediaDataModelList.sort((a, b) => a.position - b.position);
         categoryDataModelList = categoryDataList;
         categoryDataModelList.sort((a, b) => a.title.compareTo(b.title));
-        // categoryDataModelList.first.defaultSelectedItem(categoryDataModelList);
         _isExpandedList = List.generate(mediaDataModelList.length, (index) => false);
       });
     } catch (error) {
@@ -247,11 +252,12 @@ class _HomePageState extends State<HomePage> {
                       print("Selected Date : ${todayDay.day}, $weekName, $monthName ");
                     },
                       monthSelectCallBack: (DateTime dateTime) async {
+                        setState(() {
+                          todayDay = dateTime;
+                          selectedMonth = DateFormat('MMMM').format(dateTime);
+                        });
                         var day = dateTime.day;
                         var weekName = DateFormat('EEEE').format(dateTime);
-                        setState(() {
-                          selectedMonth = DateFormat('MMMM').format(dateTime);;
-                        });
                         getDataByMonthAndDate();
                         print("Selected Month : $day, ${todayDay.day}, $weekName, $selectedMonth ");
                       },
@@ -671,10 +677,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void goToPage(Widget page, BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => page));
-  }
-
   Widget buildHorizontalImageWithTitleListItem(CommunityCategory model) {
     return GestureDetector(
       child: Row(
@@ -721,8 +723,12 @@ class _HomePageState extends State<HomePage> {
       onTap: () {
         setState(() {
           model.toggleSelectionOne(categoryDataModelList);
-          goToPage(CategoryDataShowScreen(title: model.title), context);
         });
+        if(model.title == "Devotion"){
+          goToPage(DevotionScreen(title: model.title), true,  context);
+        }else{
+          goToPage(CategoryDataShowScreen(title: model.title), true,  context);
+        }
       },
     );
   }

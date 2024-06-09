@@ -48,6 +48,7 @@ dependencies:
   horizontal_calendar: ^1.1.2
   intl: ^0.18.1
   video_thumbnail: ^0.5.0
+  flutter_tts: ^4.0.2
 
 
 
