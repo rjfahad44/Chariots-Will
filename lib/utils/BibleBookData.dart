@@ -3,8 +3,8 @@ import '../model/BookTextLine.dart';
 final List<BookTextLine> bookTextLine = [
   /*01-June*/
   BookTextLine(
-      title: "Day 1 Morning",
-      subTitle: "John 12:20-50",
+      title: "John 12:20-50",
+      subTitle: "Day 1 Morning",
       type: "Morning",
       date: "01-June",
       lines: [
@@ -41,8 +41,8 @@ final List<BookTextLine> bookTextLine = [
         "I know that his command leads to eternal life. So whatever I say is just what the Father has told me to say.\'"
       ]),
   BookTextLine(
-      title: "Day 1 Evening",
-      subTitle: "2 Chronicles 4-6",
+      title: "2 Chronicles 4-6",
+      subTitle: "Day 1 Evening",
       type: "Evening",
       date: "01-June",
       lines: [
@@ -127,8 +127,8 @@ final List<BookTextLine> bookTextLine = [
       ]),
   /*02-June*/
   BookTextLine(
-      title: "Day 2 Morning",
-      subTitle: "John 13:1-17",
+      title: "John 13:1-17",
+      subTitle: "Day 2 Morning",
       type: "Morning",
       date: "02-June",
       lines: [
@@ -151,8 +151,8 @@ final List<BookTextLine> bookTextLine = [
         "Now that you know these things, you will be blessed if you do them."
       ]),
   BookTextLine(
-      title: "Day 2 Evening",
-      subTitle: "2 Chronicles 7-9",
+      title: "2 Chronicles 7-9",
+      subTitle: "Day 2 Evening",
       type: "Evening",
       date: "02-June",
       lines: [
@@ -232,8 +232,8 @@ final List<BookTextLine> bookTextLine = [
       ]),
   /*03-June*/
   BookTextLine(
-      title: "Day 3 Morning",
-      subTitle: "John 13:18-38",
+      title: "John 13:18-38",
+      subTitle: "Day 3 Morning",
       type: "Morning",
       date: "03-June",
       lines: [
@@ -261,8 +261,8 @@ final List<BookTextLine> bookTextLine = [
             "Then Jesus answered, \"Will you really lay down your life for me? I tell you the truth, before the rooster crows, you will disown me three times!"
       ]),
   BookTextLine(
-      title: "Day 3 Evening",
-      subTitle: "2 Chronicles 10-12",
+      title: "2 Chronicles 10-12",
+      subTitle: "Day 3 Evening",
       type: "Evening",
       date: "03-June",
       lines: [
@@ -325,8 +325,8 @@ final List<BookTextLine> bookTextLine = [
       ]),
   /*04-June*/
   BookTextLine(
-      title: "Day 4 Morning",
-      subTitle: "John 14",
+      title: "John 14",
+      subTitle: "Day 4 Morning",
       type: "Morning",
       date: "04-June",
       lines: [
@@ -363,8 +363,8 @@ final List<BookTextLine> bookTextLine = [
         "but the world must learn that I love the Father and that I do exactly what my Father has commanded me. 'Come now; let us leave.'"
       ]),
   BookTextLine(
-      title: "Day 4 Evening",
-      subTitle: "2 Chronicles 13-16",
+      title: "2 Chronicles 13-16",
+      subTitle: "Day 4 Evening",
       type: "Evening",
       date: "04-June",
       lines: [
@@ -440,8 +440,8 @@ final List<BookTextLine> bookTextLine = [
       ]),
   /*05-June*/
   BookTextLine(
-      title: "Day 5 Morning",
-      subTitle: "John 15",
+      title: "John 15",
+      subTitle: "Day 5 Morning",
       type: "Morning",
       date: "05-June",
       lines: [
@@ -474,8 +474,8 @@ final List<BookTextLine> bookTextLine = [
         "And you also must testify, for you have been with me from the beginning."
       ]),
   BookTextLine(
-      title: "Day 5 Evening",
-      subTitle: "2 Chronicles 17-19",
+      title: "2 Chronicles 17-19",
+      subTitle: "Day 5 Evening",
       type: "Evening",
       date: "05-June",
       lines: [
@@ -544,8 +544,8 @@ final List<BookTextLine> bookTextLine = [
       ]),
   /*06-June*/
   BookTextLine(
-      title: "Day 6 Morning",
-      subTitle: "John 16:1-15",
+      title: "John 16:1-15",
+      subTitle: "Day 6 Morning",
       type: "Morning",
       date: "06-June",
       lines: [
@@ -566,8 +566,8 @@ final List<BookTextLine> bookTextLine = [
         "All that belongs to the Father is mine. That is why I said the Spirit will take from what is mine and make it known to you."
       ]),
   BookTextLine(
-      title: "Day 6 Evening",
-      subTitle: "2 Chronicles 20-22",
+      title: "2 Chronicles 20-22",
+      subTitle: "Day 6 Evening",
       type: "Evening",
       date: "06-June",
       lines: [
@@ -647,8 +647,8 @@ final List<BookTextLine> bookTextLine = [
       ]),
   /*07-June*/
   BookTextLine(
-      title: "Day 7 Morning",
-      subTitle: "John 16:16-33",
+      title: "John 16:16-33",
+      subTitle: "Day 7 Morning",
       type: "Morning",
       date: "07-June",
       lines: [
@@ -672,8 +672,8 @@ final List<BookTextLine> bookTextLine = [
         "\"I have told you these things, so that in me you may have peace. In this world you will have trouble. But take heart! I have overcome the world.\""
       ]),
   BookTextLine(
-      title: "Day 7 Evening",
-      subTitle: "2 Chronicles 23-25",
+      title: "2 Chronicles 23-25",
+      subTitle: "Day 7 Evening",
       type: "Evening",
       date: "07-June",
       lines: [
@@ -756,8 +756,8 @@ final List<BookTextLine> bookTextLine = [
       ]),
   /*08-June*/
   BookTextLine(
-      title: "Day 8 Morning",
-      subTitle: "John 17",
+      title: "John 17",
+      subTitle: "Day 8 Morning",
       type: "Morning",
       date: "08-June",
       lines: [
@@ -788,8 +788,8 @@ final List<BookTextLine> bookTextLine = [
         "I have made you known to them, and will continue to make you known in order that the love you have for me may be in them and that I myself may be in them."
       ]),
   BookTextLine(
-      title: "Day 8 Evening",
-      subTitle: "2 Chronicles 26-28",
+      title: "2 Chronicles 26-28",
+      subTitle: "Day 8 Evening",
       type: "Evening",
       date: "08-June",
       lines: [
@@ -855,8 +855,8 @@ final List<BookTextLine> bookTextLine = [
       ]),
 /*09-June*/
   BookTextLine(
-      title: "Day 9 Morning",
-      subTitle: "John 18:1-23",
+      title: "John 18:1-23",
+      subTitle: "Day 9 Morning",
       type: "Morning",
       date: "09-June",
       lines: [
@@ -885,8 +885,8 @@ final List<BookTextLine> bookTextLine = [
         "'If I said something wrong,' Jesus replied, 'testify as to what is wrong. But if I spoke the truth, why did you strike me?'"
       ]),
   BookTextLine(
-      title: "Day 9 Evening",
-      subTitle: "2 Chronicles 29-31",
+      title: "2 Chronicles 29-31",
+      subTitle: "Day 9 Evening",
       type: "Evening",
       date: "09-June",
       lines: [
@@ -1009,8 +1009,8 @@ final List<BookTextLine> bookTextLine = [
       ]),
 /*10-June*/
   BookTextLine(
-      title: "Day 10 Morning",
-      subTitle: "John 18:24-40",
+      title: "John 18:24-40",
+      subTitle: "Day 10 Morning",
       type: "Morning",
       date: "10-June",
       lines: [
@@ -1033,8 +1033,8 @@ final List<BookTextLine> bookTextLine = [
         "They shouted back, \"No, not him! Give us Barabbas!\" Now Barabbas had taken part in a rebellion."
       ]),
   BookTextLine(
-      title: "Day 10 Evening",
-      subTitle: "2 Chronicles 32-33",
+      title: "2 Chronicles 32-33",
+      subTitle: "Day 10 Evening",
       type: "Evening",
       date: "10-June",
       lines: [
